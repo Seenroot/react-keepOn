@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from './Welcome.less';
 
 export default () => (
   <p style={{ textAlign: 'center' }}>
@@ -7,5 +8,6 @@ export default () => (
       use block
     </a>
     。
+    <span className={styles.ps}>umi</span>
   </p>
 );
