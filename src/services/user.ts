@@ -6,7 +6,7 @@ export async function query(): Promise<any> {
 }
 
 export async function queryCurrent(): Promise<any> {
-  return request('/api/currentUser');
+  return request('http://localhost:8887/question/41');
 }
 
 export async function queryNotices(): Promise<any> {
