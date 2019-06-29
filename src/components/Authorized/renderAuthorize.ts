@@ -1,5 +1,5 @@
-let CURRENT: string | string[] = 'NULL';
-type CurrentAuthorityType = string | string[] | (() => typeof CURRENT);
+let CURRENT: string | string[] = 'NULL'
+type CurrentAuthorityType = string | string[] | (() => typeof CURRENT)
 /**
  * use  authority or getAuthority
  * @param {string|()=>String} currentAuthority
@@ -9,19 +9,19 @@ const renderAuthorize = <T>(Authorized: T): ((currentAuthority: CurrentAuthority
 ) => {
   if (currentAuthority) {
     if (typeof currentAuthority === 'function') {
-      CURRENT = currentAuthority();
+      CURRENT = currentAuthority()
     }
     if (
       Object.prototype.toString.call(currentAuthority) === '[object String]' ||
       Array.isArray(currentAuthority)
     ) {
-      CURRENT = currentAuthority as string[];
+      CURRENT = currentAuthority as string[]
     }
   } else {
-    CURRENT = 'NULL';
+    CURRENT = 'NULL'
   }
-  return Authorized;
-};
+  return Authorized
+}
 
-export { CURRENT };
-export default <T>(Authorized: T) => renderAuthorize<T>(Authorized);
+export { CURRENT }
+export default <T>(Authorized: T) => renderAuthorize<T>(Authorized)

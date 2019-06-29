@@ -2,13 +2,13 @@
  * request 网络请求工具
  * 更详细的 api 文档: https://github.com/umijs/umi-request
  */
-import { extend } from 'umi-request';
-import { notification } from 'antd';
+import { extend } from 'umi-request'
+import { notification } from 'antd'
 
 interface ResponseError<D = any> extends Error {
-  name: string;
-  data: D;
-  response: Response;
+  name: string
+  data: D
+  response: Response
 }
 
 const codeMessage = {
@@ -27,21 +27,21 @@ const codeMessage = {
   502: '网关错误。',
   503: '服务不可用，服务器暂时过载或维护。',
   504: '网关超时。',
-};
+}
 
 /**
  * 异常处理程序
  */
 const errorHandler = (error: ResponseError) => {
-  const { response = {} as Response } = error;
-  const errortext = codeMessage[response.status] || response.statusText;
-  const { status, url } = response;
+  const { response = {} as Response } = error
+  const errortext = codeMessage[response.status] || response.statusText
+  const { status, url } = response
 
   notification.error({
     message: `请求错误 ${status}: ${url}`,
     description: errortext,
-  });
-};
+  })
+}
 
 /**
  * 配置request请求时的默认参数
@@ -49,6 +49,6 @@ const errorHandler = (error: ResponseError) => {
 const request = extend({
   errorHandler, // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
-});
+})
 
-export default request;
+export default request

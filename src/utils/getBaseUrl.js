@@ -1,4 +1,4 @@
-export default function getBaseURL () {
+export default function getBaseURL() {
   // 根据接口文档定
   let baseURL = ''
 

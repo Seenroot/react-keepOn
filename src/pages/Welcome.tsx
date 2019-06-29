@@ -1,5 +1,5 @@
-import React from 'react';
-import styles from './Welcome.less';
+import React from 'react'
+import styles from './Welcome.less'
 
 export default () => (
   <p style={{ textAlign: 'center' }}>
@@ -7,7 +7,6 @@ export default () => (
     <a href="https://pro.ant.design/docs/block-cn" target="_blank" rel="noopener noreferrer">
       use block
     </a>
-    。
-    <span className={styles.ps}>umi</span>
+    。<span className={styles.ps}>umi</span>
   </p>
-);
+)

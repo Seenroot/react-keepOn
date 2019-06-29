@@ -1,12 +1,12 @@
 /* eslint-disable compat/compat */
-import axios from 'axios';
-import { Modal } from 'antd';
-import router from 'umi/router';
-import messageTip from './messageTip';
-import getBaseUrl from './getBaseUrl';
-import storage from './storage';
+import axios from 'axios'
+import { Modal } from 'antd'
+import router from 'umi/router'
+import messageTip from './messageTip'
+import getBaseUrl from './getBaseUrl'
+import storage from './storage'
 
-let hasModal = false;
+let hasModal = false
 
 /**
  * 跳转登录页
@@ -18,8 +18,8 @@ const toLogin = () => {
     query: {
       redirect: router.currentRoute.fullPath,
     },
-  });
-};
+  })
+}
 
 /**
  * 请求失败后的错误统一处理
@@ -30,26 +30,26 @@ const errorHandle = (status, other) => {
   switch (status) {
     // 401: 未登录状态，跳转登录页
     case 401:
-      toLogin();
-      break;
+      toLogin()
+      break
     // 403 token过期
     // 清除token并跳转登录页
     case 403:
-      messageTip({ type: 'error', content: '登录过期，请重新登录' });
-      localStorage.removeItem('token');
+      messageTip({ type: 'error', content: '登录过期，请重新登录' })
+      localStorage.removeItem('token')
       // store.commit('loginSuccess', null);
       setTimeout(() => {
-        toLogin();
-      }, 1000);
-      break;
+        toLogin()
+      }, 1000)
+      break
     // 404请求不存在
     case 404:
-      messageTip({ type: 'error', content: '请求的资源不存在' });
-      break;
+      messageTip({ type: 'error', content: '请求的资源不存在' })
+      break
     default:
-      console.log(other);
+      console.log(other)
   }
-};
+}
 
 // 创建axios实例
 const service = axios.create({
@@ -59,10 +59,10 @@ const service = axios.create({
   // 定义对于给定的HTTP 响应状态码是 resolve 或 reject  promise
   // 大于等于200 小于300 通过校验 resolve
   validateStatus(status) {
-    return status >= 200 && status < 300; // 默认的
+    return status >= 200 && status < 300 // 默认的
   },
   timeout: 6000, //  超时
-});
+})
 
 /**
  * 请求拦截器
@@ -77,14 +77,14 @@ service.interceptors.request.use(
     // 而后我们可以在响应拦截器中，根据状态码进行一些统一的操作。
     // const token = store.state.token;
     // token && (config.headers.Authorization = token);
-    return config;
+    return config
   },
   error => {
     // do something with request error
-    console.log(error); // for debug
-    Promise.error(error);
+    console.log(error) // for debug
+    Promise.error(error)
   },
-);
+)
 
 // 响应拦截器
 service.interceptors.response.use(
@@ -92,15 +92,15 @@ service.interceptors.response.use(
   res => (res.status === 200 ? Promise.resolve(res) : Promise.reject(res)),
   // 请求失败
   error => {
-    const { response } = error;
+    const { response } = error
     if (response) {
       // 请求已发出，但是不在2xx的范围
-      errorHandle(response.status, response.data.message);
-      return Promise.reject(response);
+      errorHandle(response.status, response.data.message)
+      return Promise.reject(response)
     }
-    return Promise.reject(error);
+    return Promise.reject(error)
   },
-);
+)
 
 /**
  * 对返回结果进行统一处理 不在页面中处理
@@ -110,12 +110,14 @@ service.interceptors.response.use(
  */
 function handleResData(resData, url, needAlert) {
   let needAlertInner = needAlert
-  const { data: { status } } = resData;
-  const token = storage.getItem('token');
+  const {
+    data: { status },
+  } = resData
+  const token = storage.getItem('token')
   // 根据token判断，除了登录接口和分享页面接口外，没有登录的情况不报错，直接重定向到登录页
-  const urlWhiteList = ['/daas/user/login', '/daas/auth/user/login', '/bi/share'];
+  const urlWhiteList = ['/daas/user/login', '/daas/auth/user/login', '/bi/share']
   if (!token && urlWhiteList.indexOf(url) === -1) {
-    return status;
+    return status
   }
   if (status !== 200) {
     if (status === 401) {
@@ -126,14 +128,14 @@ function handleResData(resData, url, needAlert) {
           onOk: () => {
             // window.location.hash = '#/user/login'
             // 退出登录，初始化redux数据 和 清空storage中的数据
-            window.location.href = '/#/user/login';
-            storage.clear();
+            window.location.href = '/#/user/login'
+            storage.clear()
           },
-        });
-        needAlertInner = false;
-        hasModal = !hasModal;
+        })
+        needAlertInner = false
+        hasModal = !hasModal
       }
-      return status;
+      return status
     }
     if (status === 402) {
       if (needAlertInner && !hasModal) {
@@ -143,23 +145,23 @@ function handleResData(resData, url, needAlert) {
           onOk: () => {
             // window.location.hash = '#/user/login'
             // 退出登录，初始化redux数据 和 清空storage中的数据
-            window.location.href = '/#/user/login';
-            storage.clear();
+            window.location.href = '/#/user/login'
+            storage.clear()
           },
-        });
-        needAlertInner = false;
-        hasModal = !hasModal;
+        })
+        needAlertInner = false
+        hasModal = !hasModal
       }
-      return status;
+      return status
     }
     if (needAlert) {
-      messageTip({ type: 'error', content: resData.data });
+      messageTip({ type: 'error', content: resData.data })
     }
     // 返回code 数值类型
-    return status;
+    return status
   }
   // 返回请求返回的数据 对象类型
-  return resData;
+  return resData
 }
 
 /**
@@ -168,14 +170,14 @@ function handleResData(resData, url, needAlert) {
  * @param {String} url 请求报错的接口的path 帮助定位错误接口
  */
 function handleError(error, url, needAlert) {
-  console.warn('error.config at', error.config, url);
+  console.warn('error.config at', error.config, url)
 
   if (needAlert) {
     if (error.response) {
       // 请求已发出，但服务器响应的状态码不在 2xx 范围内
-      messageTip({ type: 'error', content: `网络请求错误（状态码为：${error.response.status}）` });
+      messageTip({ type: 'error', content: `网络请求错误（状态码为：${error.response.status}）` })
       // 返回网络请求错误的状态码(number)，以便这个接口错误判断处理(typeof res === 'number'错误)
-      return error.response.status;
+      return error.response.status
     }
     // Something happened in setting up the request that triggered an Error
 
@@ -183,12 +185,12 @@ function handleError(error, url, needAlert) {
     // message.error('Error at: ' + url + '    message: ' + error.message)
     // messageTip({ type: 'error', content: `请求超时，请检查网络` })
     if (error.code === 'ECONNABORTED' && error.message.indexOf('timeout') !== -1) {
-      messageTip({ type: 'error', content: `请求超时，请稍后重试` });
+      messageTip({ type: 'error', content: `请求超时，请稍后重试` })
     }
-    messageTip({ type: 'error', content: error.message });
-    return -1;
+    messageTip({ type: 'error', content: error.message })
+    return -1
   }
-  return -1;
+  return -1
 }
 
 const request = {
@@ -200,12 +202,12 @@ const request = {
         baseURL,
       })
       .then(resData => {
-        return handleResData(resData, url, needAlert);
+        return handleResData(resData, url, needAlert)
       })
       .catch(error => {
-        return handleError(error, url, needAlert);
-      });
+        return handleError(error, url, needAlert)
+      })
   },
-};
+}
 
-export default request;
+export default request

@@ -1,16 +1,16 @@
-import SelectLang from '@/components/SelectLang';
-import { ConnectProps, ConnectState } from '@/models/connect';
-import { connect } from 'dva';
-import React from 'react';
-import DocumentTitle from 'react-document-title';
-import { formatMessage } from 'umi-plugin-react/locale';
-import Link from 'umi/link';
-import logo from '../assets/logo.svg';
-import styles from './UserLayout.less';
-import { MenuDataItem, getPageTitle, getMenuData, DefaultFooter } from '@ant-design/pro-layout';
+import SelectLang from '@/components/SelectLang'
+import { ConnectProps, ConnectState } from '@/models/connect'
+import { connect } from 'dva'
+import React from 'react'
+import DocumentTitle from 'react-document-title'
+import { formatMessage } from 'umi-plugin-react/locale'
+import Link from 'umi/link'
+import logo from '../assets/logo.svg'
+import styles from './UserLayout.less'
+import { MenuDataItem, getPageTitle, getMenuData, DefaultFooter } from '@ant-design/pro-layout'
 
 export interface UserLayoutProps extends ConnectProps {
-  breadcrumbNameMap: { [path: string]: MenuDataItem };
+  breadcrumbNameMap: { [path: string]: MenuDataItem }
 }
 
 const UserLayout: React.SFC<UserLayoutProps> = props => {
@@ -18,15 +18,15 @@ const UserLayout: React.SFC<UserLayoutProps> = props => {
     route = {
       routes: [],
     },
-  } = props;
-  const { routes = [] } = route;
+  } = props
+  const { routes = [] } = route
   const {
     children,
     location = {
       pathname: '',
     },
-  } = props;
-  const { breadcrumb } = getMenuData(routes, props);
+  } = props
+  const { breadcrumb } = getMenuData(routes, props)
 
   return (
     <DocumentTitle
@@ -56,9 +56,9 @@ const UserLayout: React.SFC<UserLayoutProps> = props => {
         <DefaultFooter />
       </div>
     </DocumentTitle>
-  );
-};
+  )
+}
 
 export default connect(({ settings }: ConnectState) => ({
   ...settings,
-}))(UserLayout);
+}))(UserLayout)

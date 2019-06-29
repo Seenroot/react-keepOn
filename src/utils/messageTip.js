@@ -1,17 +1,15 @@
 import _ from 'lodash'
-import {
-  message
-} from 'antd'
+import { message } from 'antd'
 
 const messageList = []
 
-export default function ({
+export default function({
   type = 'error',
   content = '',
   duration = 3,
   onClose = null,
   top = '24px',
-  timeStamp = +new Date()
+  timeStamp = +new Date(),
 }) {
   const messageItem = _.findLast(messageList, item => {
     return item.content === content
@@ -37,6 +35,6 @@ export default function ({
     duration,
     onClose,
     top,
-    timeStamp
+    timeStamp,
   })
 }

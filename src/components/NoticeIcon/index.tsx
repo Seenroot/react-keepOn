@@ -1,43 +1,43 @@
-import React, { Component } from 'react';
-import { Icon, Tabs, Badge, Spin } from 'antd';
-import classNames from 'classnames';
-import HeaderDropdown from '../HeaderDropdown';
-import NoticeList, { NoticeIconTabProps } from './NoticeList';
-import styles from './index.less';
+import React, { Component } from 'react'
+import { Icon, Tabs, Badge, Spin } from 'antd'
+import classNames from 'classnames'
+import HeaderDropdown from '../HeaderDropdown'
+import NoticeList, { NoticeIconTabProps } from './NoticeList'
+import styles from './index.less'
 
-const { TabPane } = Tabs;
+const { TabPane } = Tabs
 
 export interface NoticeIconData {
-  avatar?: string | React.ReactNode;
-  title?: React.ReactNode;
-  description?: React.ReactNode;
-  datetime?: React.ReactNode;
-  extra?: React.ReactNode;
-  style?: React.CSSProperties;
-  key?: string | number;
-  read?: boolean;
+  avatar?: string | React.ReactNode
+  title?: React.ReactNode
+  description?: React.ReactNode
+  datetime?: React.ReactNode
+  extra?: React.ReactNode
+  style?: React.CSSProperties
+  key?: string | number
+  read?: boolean
 }
 
 export interface NoticeIconProps {
-  count?: number;
-  bell?: React.ReactNode;
-  className?: string;
-  loading?: boolean;
-  onClear?: (tabName: string, tabKey: string) => void;
-  onItemClick?: (item: NoticeIconData, tabProps: NoticeIconTabProps) => void;
-  onViewMore?: (tabProps: NoticeIconTabProps, e: MouseEvent) => void;
-  onTabChange?: (tabTile: string) => void;
-  style?: React.CSSProperties;
-  onPopupVisibleChange?: (visible: boolean) => void;
-  popupVisible?: boolean;
-  clearText?: string;
-  viewMoreText?: string;
-  clearClose?: boolean;
-  children: React.ReactElement<NoticeIconTabProps>[];
+  count?: number
+  bell?: React.ReactNode
+  className?: string
+  loading?: boolean
+  onClear?: (tabName: string, tabKey: string) => void
+  onItemClick?: (item: NoticeIconData, tabProps: NoticeIconTabProps) => void
+  onViewMore?: (tabProps: NoticeIconTabProps, e: MouseEvent) => void
+  onTabChange?: (tabTile: string) => void
+  style?: React.CSSProperties
+  onPopupVisibleChange?: (visible: boolean) => void
+  popupVisible?: boolean
+  clearText?: string
+  viewMoreText?: string
+  clearClose?: boolean
+  children: React.ReactElement<NoticeIconTabProps>[]
 }
 
 export default class NoticeIcon extends Component<NoticeIconProps> {
-  public static Tab: typeof NoticeList = NoticeList;
+  public static Tab: typeof NoticeList = NoticeList
 
   static defaultProps = {
     onItemClick: () => {},
@@ -48,53 +48,53 @@ export default class NoticeIcon extends Component<NoticeIconProps> {
     loading: false,
     clearClose: false,
     emptyImage: 'https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg',
-  };
+  }
 
   state = {
     visible: false,
-  };
+  }
 
   onItemClick = (item: NoticeIconData, tabProps: NoticeIconTabProps) => {
-    const { onItemClick } = this.props;
+    const { onItemClick } = this.props
     if (onItemClick) {
-      onItemClick(item, tabProps);
+      onItemClick(item, tabProps)
     }
-  };
+  }
 
   onClear = (name: string, key: string) => {
-    const { onClear } = this.props;
+    const { onClear } = this.props
     if (onClear) {
-      onClear(name, key);
+      onClear(name, key)
     }
-  };
+  }
 
   onTabChange = (tabType: string) => {
-    const { onTabChange } = this.props;
+    const { onTabChange } = this.props
     if (onTabChange) {
-      onTabChange(tabType);
+      onTabChange(tabType)
     }
-  };
+  }
 
   onViewMore = (tabProps: NoticeIconTabProps, event: MouseEvent) => {
-    const { onViewMore } = this.props;
+    const { onViewMore } = this.props
     if (onViewMore) {
-      onViewMore(tabProps, event);
+      onViewMore(tabProps, event)
     }
-  };
+  }
 
   getNotificationBox() {
-    const { children, loading, clearText, viewMoreText } = this.props;
+    const { children, loading, clearText, viewMoreText } = this.props
     if (!children) {
-      return null;
+      return null
     }
     const panes = React.Children.map(children, (child: React.ReactElement<NoticeIconTabProps>) => {
       if (!child) {
-        return null;
+        return null
       }
-      const { list, title, count, tabKey, showClear, showViewMore } = child.props;
-      const len = list && list.length ? list.length : 0;
-      const msgCount = count || count === 0 ? count : len;
-      const tabTitle: string = msgCount > 0 ? `${title} (${msgCount})` : title;
+      const { list, title, count, tabKey, showClear, showViewMore } = child.props
+      const len = list && list.length ? list.length : 0
+      const msgCount = count || count === 0 ? count : len
+      const tabTitle: string = msgCount > 0 ? `${title} (${msgCount})` : title
       return (
         <TabPane tab={tabTitle} key={title}>
           <NoticeList
@@ -110,46 +110,46 @@ export default class NoticeIcon extends Component<NoticeIconProps> {
             {...child.props}
           />
         </TabPane>
-      );
-    });
+      )
+    })
     return (
       <Spin spinning={loading} delay={0}>
         <Tabs className={styles.tabs} onChange={this.onTabChange}>
           {panes}
         </Tabs>
       </Spin>
-    );
+    )
   }
 
   handleVisibleChange = (visible: boolean) => {
-    const { onPopupVisibleChange } = this.props;
-    this.setState({ visible });
+    const { onPopupVisibleChange } = this.props
+    this.setState({ visible })
     if (onPopupVisibleChange) {
-      onPopupVisibleChange(visible);
+      onPopupVisibleChange(visible)
     }
-  };
+  }
 
   render() {
-    const { className, count, popupVisible, bell } = this.props;
-    const { visible } = this.state;
-    const noticeButtonClass = classNames(className, styles.noticeButton);
-    const notificationBox = this.getNotificationBox();
-    const NoticeBellIcon = bell || <Icon type="bell" className={styles.icon} />;
+    const { className, count, popupVisible, bell } = this.props
+    const { visible } = this.state
+    const noticeButtonClass = classNames(className, styles.noticeButton)
+    const notificationBox = this.getNotificationBox()
+    const NoticeBellIcon = bell || <Icon type="bell" className={styles.icon} />
     const trigger = (
       <span className={classNames(noticeButtonClass, { opened: visible })}>
         <Badge count={count} style={{ boxShadow: 'none' }} className={styles.badge}>
           {NoticeBellIcon}
         </Badge>
       </span>
-    );
+    )
     if (!notificationBox) {
-      return trigger;
+      return trigger
     }
     const popoverProps: {
-      visible?: boolean;
-    } = {};
+      visible?: boolean
+    } = {}
     if ('popupVisible' in this.props) {
-      popoverProps.visible = popupVisible;
+      popoverProps.visible = popupVisible
     }
     return (
       <HeaderDropdown
@@ -163,6 +163,6 @@ export default class NoticeIcon extends Component<NoticeIconProps> {
       >
         {trigger}
       </HeaderDropdown>
-    );
+    )
   }
 }

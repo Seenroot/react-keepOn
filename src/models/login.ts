@@ -1,26 +1,26 @@
-import { routerRedux } from 'dva/router';
-import { Reducer, AnyAction } from 'redux';
-import { EffectsCommandMap } from 'dva';
-import { stringify, parse } from 'qs';
+import { routerRedux } from 'dva/router'
+import { Reducer, AnyAction } from 'redux'
+import { EffectsCommandMap } from 'dva'
+import { stringify, parse } from 'qs'
 
 export function getPageQuery() {
-  return parse(window.location.href.split('?')[1]);
+  return parse(window.location.href.split('?')[1])
 }
 
 export type Effect = (
   action: AnyAction,
   effects: EffectsCommandMap & { select: <T>(func: (state: {}) => T) => T },
-) => void;
+) => void
 
 export interface ModelType {
-  namespace: string;
-  state: {};
+  namespace: string
+  state: {}
   effects: {
-    logout: Effect;
-  };
+    logout: Effect
+  }
   reducers: {
-    changeLoginStatus: Reducer<{}>;
-  };
+    changeLoginStatus: Reducer<{}>
+  }
 }
 
 const Model: ModelType = {
@@ -32,7 +32,7 @@ const Model: ModelType = {
 
   effects: {
     *logout(_, { put }) {
-      const { redirect } = getPageQuery();
+      const { redirect } = getPageQuery()
       // redirect
       if (window.location.pathname !== '/user/login' && !redirect) {
         yield put(
@@ -42,7 +42,7 @@ const Model: ModelType = {
               redirect: window.location.href,
             }),
           }),
-        );
+        )
       }
     },
   },
@@ -53,9 +53,9 @@ const Model: ModelType = {
         ...state,
         status: payload.status,
         type: payload.type,
-      };
+      }
     },
   },
-};
+}
 
-export default Model;
+export default Model
